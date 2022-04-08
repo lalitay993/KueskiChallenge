@@ -25,7 +25,7 @@
 > **Description:** The architecture idea for this challenge, It's get a pipeline with the ProcessingJob and TrainningJob in the same StepFunctions Workflow. The workflow is started by a rule on EventBrigde every first day of month, calling a Lambda Functions that this one gets all the parameters to execute StepFunction.
 Finally, The architecture has a monitoring group where all metrics from Sagemaker would be save and sends an email by SNS Topic
 >
->![Build](.\Documentation\images\MLArchitecture.png)
+>![Build](Documentation/images/MLArchitecture.png)
 
 ---
 
@@ -45,7 +45,7 @@ Finally, The architecture has a monitoring group where all metrics from Sagemake
 >- main (This is the branch that CodeCommit sees)
 >- dev
 >
->![Build](.\Documentation\images\codecommit_1.PNG)
+>![Build](Documentation/images/codecommit_1.PNG)
 
 ---
 ## 2.3. CodeBuild 
@@ -56,7 +56,7 @@ Finally, The architecture has a monitoring group where all metrics from Sagemake
 >| kueski-challenge-inference-build-image  |  	Amazon S3 |  kueski-challenge-dev/kueski-challenge/images/kueski-challenge-inference.zip|  
 >
 >
->![Build](.\Documentation\images\codebuild_1.PNG)
+>![Build](Documentation/images/codebuild_1.PNG)
 
 ---
 ## 2.4. CodePipeline
@@ -66,29 +66,29 @@ Finally, The architecture has a monitoring group where all metrics from Sagemake
 >>- Approval: Manual approval for review before deploy. Send an email by SNS Topic <br>
 >>- Deploy: Deploy CodeCommit Repository in a specific S3 bucket <br> 
 >
->![Pipeline](.\Documentation\images\codepipeline_1.PNG)
+>![Pipeline](Documentation/images/codepipeline_1.PNG)
 
 ## 2.5. SNS
 
 >Topic: KueskiPipelineApproval <br>
 >Description: Sends an email when CodePipeline runs <br>
->![SNS](.\Documentation\images\sns_1.PNG)
+>![SNS](Documentation/images/sns_1.PNG)
 
 ## 2.6. CloudWatch Event Rule or EventBringe
 
 >Rule: startStepFunction <br>
 >Description: It's for stepfunction execution and retrainning model (every month)   <br>
->![Bridge](.\Documentation\images\eventbridge_1.PNG)
+>![Bridge](Documentation/images/eventbridge_1.PNG)
 
 ## 2.7. Lambdas 
 
 >**API: getFeatures** <br>
 >_Code_: src\scripts\lambdas\kueski-challenge-GetFeatures.py <br>
->![Features](.\Documentation\images\getFeatures_1.PNG)
+>![Features](Documentation/images/getFeatures_1.PNG)
 >
 > **API: getPrediction** <br>
 > _Code:_ src\scripts\lambdas\kueski-challenge-GetPredictions.py <br>
-> ![Prediction](.\Documentation\images\getPrediction_1.PNG)
+> ![Prediction](Documentation/images/getPrediction_1.PNG)
 >
 >**Lambda Step Function: runStepFunction** <br>
 >_Description:_ Set and sends parameters before starts StepFunctions Workflow
@@ -98,7 +98,7 @@ Finally, The architecture has a monitoring group where all metrics from Sagemake
 > **PreprocessingJob** <br>
 > _Code:_ src\scripts\sagemaker\kueski-challenge-preprocessing.py <br>
 > _Container:_ kueski-challenge-processing:latest <br>
-> ![Preprocessing](.\Documentation\images\preprocessing_1.PNG)
+> ![Preprocessing](Documentation/images/preprocessing_1.PNG)
 >
 > **TrainningJobs** <br>
 > _Code:_ src\scripts\sagemaker\kueski-challenge-preprocessing.py <br>
@@ -111,9 +111,9 @@ Finally, The architecture has a monitoring group where all metrics from Sagemake
 > - Endpoint Config: KueskiEndpointConfig
 > - Model: KueskiModel
 > 
-> ![Endpoint1](.\Documentation\images\endpoint_1.PNG)
-> ![Endpoint2](.\Documentation\images\endpoint_2.PNG)
-> ![Endpoint3](.\Documentation\images\endpoint_3.PNG)
+> ![Endpoint1](Documentation/images/endpoint_1.PNG)
+> ![Endpoint2](Documentation/images/endpoint_2.PNG)
+> ![Endpoint3](Documentation/images/endpoint_3.PNG)
 
 ---
 ## 3. Repository structure
