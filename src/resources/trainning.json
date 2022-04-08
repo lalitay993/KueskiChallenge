@@ -1,0 +1,133 @@
+/* {
+    "AlgorithmSpecification": { 
+       "AlgorithmName": "string",
+       "EnableSageMakerMetricsTimeSeries": boolean,
+       "MetricDefinitions": [ 
+          { 
+             "Name": "string",
+             "Regex": "string"
+          }
+       ],
+       "TrainingImage": "string",
+       "TrainingInputMode": "string"
+    },
+    "CheckpointConfig": { 
+       "LocalPath": "string",
+       "S3Uri": "string"
+    },
+    "DebugHookConfig": { 
+       "CollectionConfigurations": [ 
+          { 
+             "CollectionName": "string",
+             "CollectionParameters": { 
+                "string" : "string" 
+             }
+          }
+       ],
+       "HookParameters": { 
+          "string" : "string" 
+       },
+       "LocalPath": "string",
+       "S3OutputPath": "string"
+    },
+    "DebugRuleConfigurations": [ 
+       { 
+          "InstanceType": "string",
+          "LocalPath": "string",
+          "RuleConfigurationName": "string",
+          "RuleEvaluatorImage": "string",
+          "RuleParameters": { 
+             "string" : "string" 
+          },
+          "S3OutputPath": "string",
+          "VolumeSizeInGB": number
+       }
+    ],
+    "EnableInterContainerTrafficEncryption": boolean,
+    "EnableManagedSpotTraining": boolean,
+    "EnableNetworkIsolation": boolean,
+    "Environment": { 
+       "string" : "string" 
+    },
+    "ExperimentConfig": { 
+       "ExperimentName": "string",
+       "TrialComponentDisplayName": "string",
+       "TrialName": "string"
+    },
+    "HyperParameters": { 
+       "string" : "string" 
+    },
+    "InputDataConfig": [ 
+       { 
+          "ChannelName": "string",
+          "CompressionType": "string",
+          "ContentType": "string",
+          "DataSource": { 
+             "FileSystemDataSource": { 
+                "DirectoryPath": "string",
+                "FileSystemAccessMode": "string",
+                "FileSystemId": "string",
+                "FileSystemType": "string"
+             },
+             "S3DataSource": { 
+                "AttributeNames": [ "string" ],
+                "S3DataDistributionType": "string",
+                "S3DataType": "string",
+                "S3Uri": "string"
+             }
+          },
+          "InputMode": "string",
+          "RecordWrapperType": "string",
+          "ShuffleConfig": { 
+             "Seed": number
+          }
+       }
+    ],
+    "OutputDataConfig": { 
+       "KmsKeyId": "string",
+       "S3OutputPath": "string"
+    },
+    "ProfilerConfig": { 
+       "ProfilingIntervalInMilliseconds": number,
+       "ProfilingParameters": { 
+          "string" : "string" 
+       },
+       "S3OutputPath": "string"
+    },
+    "ProfilerRuleConfigurations": [ 
+       { 
+          "InstanceType": "string",
+          "LocalPath": "string",
+          "RuleConfigurationName": "string",
+          "RuleEvaluatorImage": "string",
+          "RuleParameters": { 
+             "string" : "string" 
+          },
+          "S3OutputPath": "string",
+          "VolumeSizeInGB": number
+       }
+    ],
+    "ResourceConfig": { 
+       "InstanceCount": number,
+       "InstanceType": "string",
+       "VolumeKmsKeyId": "string",
+       "VolumeSizeInGB": number
+    },
+    "RetryStrategy": { 
+       "MaximumRetryAttempts": number
+    },
+    "RoleArn": "string",
+    "StoppingCondition": { 
+       "MaxRuntimeInSeconds": number,
+       "MaxWaitTimeInSeconds": number
+    },
+    "TensorBoardOutputConfig": { 
+       "LocalPath": "string",
+       "S3OutputPath": "string"
+    },
+    "TrainingJobName": "string",
+    "VpcConfig": { 
+       "SecurityGroupIds": [ "string" ],
+       "Subnets": [ "string" ]
+    }
+ } */

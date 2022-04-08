@@ -1,0 +1,273 @@
+{
+  "Comment": "A description of my state machine",
+  "StartAt": "Processing",
+  "States": {
+    "Processing": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sagemaker:createProcessingJob",
+      "Parameters": {
+        "AppSpecification": {
+          "ContainerArguments": [
+            "--training_model_path",
+            "/opt/ml/processing/output/train_model.parquet",
+            "--dataset_path",
+            "/opt/ml/processing/input/dataset_credit_risk.csv"
+          ],
+          "ContainerEntrypoint": [
+            "python3",
+            "/opt/ml/processing/input/code/kueski-challenge-preprocessing.py"
+          ],
+          "ImageUri": "371815123890.dkr.ecr.us-east-1.amazonaws.com/kueski-challenge-processing:latest"
+        },
+        "NetworkConfig": {
+          "EnableInterContainerTrafficEncryption": false,
+          "EnableNetworkIsolation": false
+        },
+        "ProcessingInputs": [
+          {
+            "InputName": "dataset_credit_risk.csv",
+            "AppManaged": false,
+            "S3Input": {
+              "LocalPath": "/opt/ml/processing/input",
+              "S3CompressionType": "None",
+              "S3DataDistributionType": "FullyReplicated",
+              "S3DataType": "S3Prefix",
+              "S3InputMode": "File",
+              "S3Uri": "s3://kueski-challenge-dev/landing/dataset_credit_risk.csv"
+            }
+          },
+          {
+            "InputName": "preprocessing.py",
+            "AppManaged": false,
+            "S3Input": {
+              "LocalPath": "/opt/ml/processing/input/code",
+              "S3CompressionType": "None",
+              "S3DataDistributionType": "FullyReplicated",
+              "S3DataType": "S3Prefix",
+              "S3InputMode": "File",
+              "S3Uri": "s3://kueski-challenge-dev/sources/src/scripts/sagemaker/kueski-challenge-preprocessing.py"
+            }
+          }
+        ],
+        "ProcessingJobName": "preprocessing",
+        "ProcessingOutputConfig": {
+          "Outputs": [
+            {
+              "OutputName": "train_model",
+              "S3Output": {
+                "LocalPath": "/opt/ml/processing/output/train_model.parquet",
+                "S3UploadMode": "EndOfJob",
+                "S3Uri": "s3://kueski-challenge-dev/preprocessing"
+              }
+            }
+          ]
+        },
+        "ProcessingResources": {
+          "ClusterConfig": {
+            "InstanceCount": 1,
+            "InstanceType": "ml.t3.medium",
+            "VolumeSizeInGB": 5
+          }
+        },
+        "RoleArn": "arn:aws:iam::371815123890:role/service-role/AmazonSageMaker-ExecutionRole-20220405T223399",
+        "StoppingCondition": {
+          "MaxRuntimeInSeconds": 3600
+        }
+      },
+      "Next": "Trainning"
+    },
+    "Trainning": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sagemaker:createTrainingJob",
+      "Parameters": {
+        "AlgorithmSpecification": {
+          "AlgorithmName": "string",
+          "EnableSageMakerMetricsTimeSeries": true,
+          "MetricDefinitions": [
+            {
+              "Name": "string",
+              "Regex": "string"
+            }
+          ],
+          "TrainingImage": "string",
+          "TrainingInputMode": "string"
+        },
+        "CheckpointConfig": {
+          "LocalPath": "string",
+          "S3Uri": "string"
+        },
+        "DebugHookConfig": {
+          "CollectionConfigurations": [
+            {
+              "CollectionName": "string",
+              "CollectionParameters": {
+                "string": "string"
+              }
+            }
+          ],
+          "HookParameters": {
+            "string": "string"
+          },
+          "LocalPath": "string",
+          "S3OutputPath": "string"
+        },
+        "DebugRuleConfigurations": [
+          {
+            "InstanceType": "string",
+            "LocalPath": "string",
+            "RuleConfigurationName": "string",
+            "RuleEvaluatorImage": "string",
+            "RuleParameters": {
+              "string": "string"
+            },
+            "S3OutputPath": "string",
+            "VolumeSizeInGB": 12345
+          }
+        ],
+        "EnableInterContainerTrafficEncryption": true,
+        "EnableManagedSpotTraining": true,
+        "EnableNetworkIsolation": true,
+        "Environment": {
+          "string": "string"
+        },
+        "ExperimentConfig": {
+          "ExperimentName": "string",
+          "TrialComponentDisplayName": "string",
+          "TrialName": "string"
+        },
+        "HyperParameters": {
+          "string": "string"
+        },
+        "InputDataConfig": [
+          {
+            "ChannelName": "string",
+            "CompressionType": "string",
+            "ContentType": "string",
+            "DataSource": {
+              "FileSystemDataSource": {
+                "DirectoryPath": "string",
+                "FileSystemAccessMode": "string",
+                "FileSystemId": "string",
+                "FileSystemType": "string"
+              },
+              "S3DataSource": {
+                "AttributeNames": [
+                  "string"
+                ],
+                "S3DataDistributionType": "string",
+                "S3DataType": "string",
+                "S3Uri": "string"
+              }
+            },
+            "InputMode": "string",
+            "RecordWrapperType": "string",
+            "ShuffleConfig": {
+              "Seed": 12345
+            }
+          }
+        ],
+        "OutputDataConfig": {
+          "KmsKeyId": "string",
+          "S3OutputPath": "string"
+        },
+        "ProfilerConfig": {
+          "ProfilingIntervalInMilliseconds": 12345,
+          "ProfilingParameters": {
+            "string": "string"
+          },
+          "S3OutputPath": "string"
+        },
+        "ProfilerRuleConfigurations": [
+          {
+            "InstanceType": "string",
+            "LocalPath": "string",
+            "RuleConfigurationName": "string",
+            "RuleEvaluatorImage": "string",
+            "RuleParameters": {
+              "string": "string"
+            },
+            "S3OutputPath": "string",
+            "VolumeSizeInGB": 12345
+          }
+        ],
+        "ResourceConfig": {
+          "InstanceCount": 12345,
+          "InstanceType": "string",
+          "VolumeKmsKeyId": "string",
+          "VolumeSizeInGB": 12345
+        },
+        "RetryStrategy": {
+          "MaximumRetryAttempts": 12345
+        },
+        "RoleArn": "arn:aws:iam::123456789012:role/SM-003-CreateProcessingJobAPIExecutionRol",
+        "StoppingCondition": {
+          "MaxRuntimeInSeconds": 12345,
+          "MaxWaitTimeInSeconds": 12345
+        },
+        "Tags": [
+          {
+            "Key": "string",
+            "Value": "string"
+          }
+        ],
+        "TensorBoardOutputConfig": {
+          "LocalPath": "string",
+          "S3OutputPath": "string"
+        },
+        "TrainingJobName": "string",
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            "string"
+          ],
+          "Subnets": [
+            "string"
+          ]
+        }
+      },
+      "Next": "Get Metadata"
+    },
+    "Get Metadata": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 6,
+          "BackoffRate": 2
+        }
+      ],
+      "Next": "Save Metadata"
+    },
+    "Save Metadata": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::dynamodb:putItem",
+      "Parameters": {
+        "TableName": "MyDynamoDBTable",
+        "Item": {
+          "Column": {
+            "S": "MyEntry"
+          }
+        }
+      },
+      "Next": "SNS Publish"
+    },
+    "SNS Publish": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "Message.$": "$",
+        "TopicArn": "arn:aws:sns:us-east-1:371815123890:KueskiPipelineApproval"
+      },
+      "End": true
+    }
+  }
+}

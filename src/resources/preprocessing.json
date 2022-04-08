@@ -1,0 +1,62 @@
+{
+    "AppSpecification": { 
+       "ContainerArguments": ["--training_model_path", "/opt/ml/processing/output/train_model",
+        "--dataset_path", "/opt/ml/processing/input/dataset_credit_risk.csv"],
+       "ContainerEntrypoint": ["python3","/opt/ml/processing/input/code/kueski-challenge-preprocessing.py"],
+       "ImageUri": "371815123890.dkr.ecr.us-east-1.amazonaws.com/kueski-challenge-processing:latest"
+    },
+    "NetworkConfig": { 
+       "EnableInterContainerTrafficEncryption": false,
+       "EnableNetworkIsolation": false
+    },
+    "ProcessingInputs": [ 
+        { 
+           "InputName": "dataset_credit_risk.csv",
+           "AppManaged": false,
+           "S3Input": { 
+              "LocalPath": "/opt/ml/processing/input",
+              "S3CompressionType": "None",
+              "S3DataDistributionType": "FullyReplicated",
+              "S3DataType": "S3Prefix",
+              "S3InputMode": "File",
+              "S3Uri": "s3://kueski-challenge-dev/landing/dataset_credit_risk.csv"
+           }
+        },
+        { 
+           "InputName": "preprocessing.py",
+           "AppManaged": false,
+           "S3Input": { 
+              "LocalPath": "/opt/ml/processing/input/code",
+              "S3CompressionType": "None",
+              "S3DataDistributionType": "FullyReplicated",
+              "S3DataType": "S3Prefix",
+              "S3InputMode": "File",
+              "S3Uri": "s3://kueski-challenge-dev/sources/src/scripts/sagemaker/kueski-challenge-preprocessing.py"
+           }
+        }
+    ],
+    "ProcessingJobName": "preprocessing",
+    "ProcessingOutputConfig": { 
+       "Outputs": [ 
+          { 
+             "OutputName": "train_model.parquet",
+             "S3Output": { 
+                "LocalPath": "/opt/ml/processing/output",
+                "S3UploadMode": "EndOfJob",
+                "S3Uri": "s3://kueski-challenge-dev/preprocessing"
+             }
+          }
+       ]
+    },
+    "ProcessingResources": { 
+       "ClusterConfig": { 
+          "InstanceCount": 1,
+          "InstanceType": "ml.t3.medium",
+          "VolumeSizeInGB": 5
+       }
+    },
+    "RoleArn": "arn:aws:iam::371815123890:role/service-role/AmazonSageMaker-ExecutionRole-20220405T223399",
+    "StoppingCondition": { 
+       "MaxRuntimeInSeconds": 3600
+    }
+ }

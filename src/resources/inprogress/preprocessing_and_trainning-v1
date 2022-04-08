@@ -1,0 +1,68 @@
+''' import os
+import datetime
+import sagemaker
+import sagemaker_utils
+import numpy as np
+import matplotlib.pyplot as plt
+from time import gmtime, strftime
+from sklearn.metrics import confusion_matrix
+from sagemaker import Session, get_execution_role
+from sagemaker.estimator import Estimator
+from sagemaker.processing import Processor, ProcessingInput, ProcessingOutput
+from sagemaker.tuner import HyperparameterTuner, ContinuousParameter, IntegerParameter, CategoricalParameter
+from sagemaker.inputs import TrainingInput, CreateModelInput, TransformInput
+from sagemaker.workflow.steps import ProcessingStep, TrainingStep, CreateModelStep, TransformStep
+from sagemaker.workflow.parameters import ParameterString, ParameterFloat
+from sagemaker.workflow.pipeline import Pipeline
+from sagemaker.workflow.properties import PropertyFile
+from sagemaker.model_metrics import MetricsSource, ModelMetrics
+from sagemaker.workflow.step_collections import RegisterModel
+from sagemaker.workflow.conditions import ConditionGreaterThanOrEqualTo
+from sagemaker.workflow.condition_step import ConditionStep
+from sagemaker.workflow.functions import JsonGet
+
+
+
+algorithm = Estimator(
+    image_uri = "371815123890.dkr.ecr.us-east-1.amazonaws.com/kueski-challenge-training:latest",        
+    entry_point = os.path.basename("kueski-challenge-training.py"),
+    source_dir = "s3://kueski-challenge-dev/sources/src/scripts/sagemaker",
+    role = "arn:aws:iam::371815123890:role/service-role/AmazonSageMaker-ExecutionRole-20220405T223399",
+    instance_count = 1,
+    instance_type = "ml.t3.medium",
+    output_path = "s3://kueski-challenge-dev/train_models/",
+    volume_size = 5,
+    max_run = 60*60*1, 
+
+algorithm.fit(
+    {'train_data': '/opt/ml/trainning/input'),
+    'train_target': sagemaker_utils.get_processor_output_path(processor, 'train_target')},
+    wait=False)
+
+
+processor = Processor(
+    image_uri=docker_images['Processing']['image_uri'],
+    role=sagemaker_role,
+    instance_count=1,
+    instance_type='ml.t3.medium',
+    entrypoint=['python3',f'/opt/ml/processing/input/code/kueski-challenge-preprocessing.py'],
+    volume_size_in_gb=5,
+    max_runtime_in_seconds=60*60*1)
+
+data_prep_parameters = {
+    'inputs':[ProcessingInput(
+                    input_name='dataset_credit_risk.csv',
+                    source=f's3://kueski-challenge-dev/landing/dataset_credit_risk.csv',
+                    destination='/opt/ml/trainning/input'),
+              ProcessingInput(
+                    input_name='preprocessing.py',
+                    source='s3://kueski-challenge-dev/sources/src/scripts/sagemaker/kueski-challenge-training.py',
+                    destination='/opt/ml/t/input/code')],
+    'outputs':[ProcessingOutput(
+                    output_name='train_model.parquet',
+                    source=f'/opt/ml/processing/output',
+                    destination=f's3://kueski-challenge-dev/preprocessing')],
+    'arguments':['--training_model_path', '/opt/ml/processing/output/train_model.parquet',
+                 '--dataset_path', '/opt/ml/processing/input/dataset_credit_risk.csv']}
+
+processor.run(**data_prep_parameters) '''

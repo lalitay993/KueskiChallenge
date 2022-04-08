@@ -1,0 +1,114 @@
+/* {
+    "Comment": "A description of my state machine",
+    "StartAt": "Start Preprosessing",
+    "States": {
+      "Start Preprosessing": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::states:startExecution.sync:2",
+        "Parameters": {
+          "StateMachineArn": "arn:aws:states:REGION:ACCOUNT_ID:stateMachine:STATE_MACHINE_NAME",
+          "Input": {
+            "StatePayload": "Hello from Step Functions!",
+            "AWS_STEP_FUNCTIONS_STARTED_BY_EXECUTION_ID.$": "$$.Execution.Id"
+          }
+        },
+        "Next": "Get any parameters"
+      },
+      "Get any parameters": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::lambda:invoke",
+        "OutputPath": "$.Payload",
+        "Parameters": {
+          "Payload.$": "$"
+        },
+        "Retry": [
+          {
+            "ErrorEquals": [
+              "Lambda.ServiceException",
+              "Lambda.AWSLambdaException",
+              "Lambda.SdkClientException"
+            ],
+            "IntervalSeconds": 2,
+            "MaxAttempts": 6,
+            "BackoffRate": 2
+          }
+        ],
+        "Next": "Preprosessing Job"
+      },
+      "Preprosessing Job": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::glue:startJobRun",
+        "Parameters": {
+          "JobName": "myJobName"
+        },
+        "Next": "StartCrawler"
+      },
+      "StartCrawler": {
+        "Type": "Task",
+        "Next": "Is preprossesing ok?",
+        "Parameters": {
+          "Name": "MyData"
+        },
+        "Resource": "arn:aws:states:::aws-sdk:glue:startCrawler"
+      },
+      "Is preprossesing ok?": {
+        "Type": "Choice",
+        "Choices": [
+          {
+            "Next": "Get Error Information"
+          }
+        ],
+        "Default": "Done Preprosessing"
+      },
+      "Get Error Information": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::lambda:invoke",
+        "OutputPath": "$.Payload",
+        "Parameters": {
+          "Payload.$": "$"
+        },
+        "Retry": [
+          {
+            "ErrorEquals": [
+              "Lambda.ServiceException",
+              "Lambda.AWSLambdaException",
+              "Lambda.SdkClientException"
+            ],
+            "IntervalSeconds": 2,
+            "MaxAttempts": 6,
+            "BackoffRate": 2
+          }
+        ],
+        "Next": "Save Errors"
+      },
+      "Save Errors": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::dynamodb:putItem",
+        "Parameters": {
+          "TableName": "MyDynamoDBTable",
+          "Item": {
+            "Column": {
+              "S": "MyEntry"
+            }
+          }
+        },
+        "Next": "Sent Fail Notification"
+      },
+      "Sent Fail Notification": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::sns:publish",
+        "Parameters": {
+          "Message.$": "$"
+        },
+        "End": true
+      },
+      "Done Preprosessing": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::sns:publish",
+        "Parameters": {
+          "Message.$": "$"
+        },
+        "End": true
+      }
+    }
+  } */

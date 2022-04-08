@@ -1,0 +1,59 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Metadata": {
+        "AWS::CloudFormation::Designer": {
+            "35b50b98-e877-4f6a-a471-951895dcc050": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 600,
+                    "y": 120
+                },
+                "z": 0,
+                "embeds": []
+            },
+            "4144deb9-f95c-487d-aec2-f8217efe5373": {
+                "source": {
+                    "id": "35b50b98-e877-4f6a-a471-951895dcc050"
+                },
+                "target": {
+                    "id": "f2058a59-98b1-4f91-aeb4-28b91d1f31e4"
+                },
+                "z": 1
+            },
+            "52a449ac-6005-4b26-853f-50e55efafd7d": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 738,
+                    "y": 125
+                },
+                "z": 0
+            }
+        }
+    },
+    "Resources": {
+        "GJ31VEY": {
+            "Type": "AWS::Glue::Job",
+            "Properties": {},
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "35b50b98-e877-4f6a-a471-951895dcc050"
+                }
+            }
+        },
+        "ClientRisk": {
+            "Type": "AWS::Glue::Table",
+            "Properties": {},
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "52a449ac-6005-4b26-853f-50e55efafd7d"
+                }
+            }
+        }
+    }
+}
